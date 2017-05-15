@@ -7,6 +7,17 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_whatakitty';
 
   // add your config here
+  config.mysql = {
+    client: {
+      host: 'localhost',
+      port: '3306',
+      user: 'vipshare',
+      password: 'vipshare123',
+      database: 'vipshare',
+    },
+    app: true,
+    agent: false,
+  };
 
   return config;
 };
