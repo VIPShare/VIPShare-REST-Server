@@ -1,0 +1,15 @@
+
+assert.js:81
+  throw new assert.AssertionError({
+  ^
+AssertionError: options.key should exists
+    at module.exports (/Users/xuqiang/Git/VIPShare-REST-Server/node_modules/egg-cluster/lib/utils/options.js:40:5)
+    at Master (/Users/xuqiang/Git/VIPShare-REST-Server/node_modules/egg-cluster/lib/master.js:36:20)
+    at Object.exports.startCluster (/Users/xuqiang/Git/VIPShare-REST-Server/node_modules/egg-cluster/index.js:20:3)
+    at Object.<anonymous> (/Users/xuqiang/Git/VIPShare-REST-Server/dispatch.js:3:5)
+    at Module._compile (module.js:571:32)
+    at Object.Module._extensions..js (module.js:580:10)
+    at Module.load (module.js:488:32)
+    at tryModuleLoad (module.js:447:12)
+    at Function.Module._load (module.js:439:3)
+    at Module.runMain (module.js:605:10)

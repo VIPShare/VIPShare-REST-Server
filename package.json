@@ -4,8 +4,11 @@
   "description": "",
   "private": true,
   "dependencies": {
+    "crypto": "^0.0.3",
     "egg": "^1.2.1",
-    "egg-mysql": "^3.0.0"
+    "egg-mysql": "^3.0.0",
+    "egg-socket.io": "^1.2.2",
+    "socket.io-client": "^2.0.1"
   },
   "devDependencies": {
     "autod": "^2.8.0",
