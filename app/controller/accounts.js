@@ -32,3 +32,11 @@ exports.viewable = function* (ctx) {
   };
   ctx.status = 200;
 }
+
+exports.create = function* (ctx) {
+  const result = yield ctx.service.accounts.create(ctx.request.body);
+  ctx.body = {
+    msg: 'create success',
+  }
+  ctx.status = 201;
+}

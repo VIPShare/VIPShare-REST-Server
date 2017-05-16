@@ -94,6 +94,24 @@ module.exports = app => {
         id: userId,
       });
     }
+    * update(account) {
+      const temp = yield app.mysql.get('sys_user_detail', {
+        id: account.id,
+      });
+      const result = yield app.mysql.update('sys_user_detail', {
+        id: account.id,
+        nickname: account.nickname || temp.nickname,
+        sex: account.sex || temp.sex,
+        birthday: account.birthday || temp.birthday,
+        email: account.email || temp.email,
+        address: account.address || temp.address,
+      }, {
+          where: { id: account.id },
+          columns: ['nickname', 'sex', 'birthday', 'email', 'address']
+        });
+      
+      return result.affectedRows > 0;
+    }
     * accounts(userId) {
       return yield app.mysql.select('vip_account', {
         source_id: userId,

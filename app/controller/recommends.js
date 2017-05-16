@@ -6,7 +6,7 @@ exports.index = function* (ctx) {
   // 校验 `ctx.request.body` 是否符合我们预期的格式
   // 如果参数校验未通过，将会抛出一个 status = 422 的异常
   // ctx.app.validator.validate(createRule);
-  const result = yield ctx.service.recommends.index(ctx.request.body);
+  const result = yield ctx.service.recommends.index();
 
   ctx.body = result;
   ctx.status = 200;

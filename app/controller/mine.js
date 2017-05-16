@@ -32,7 +32,6 @@ exports.signup = function* (ctx) {
 }
 
 exports.info = function* (ctx) {
-  console.log(ctx.auth.user_id);
   const info = yield ctx.service.mine.info(ctx.auth.user_id);
   if (info == null) {
     ctx.status = 200;
@@ -44,4 +43,25 @@ exports.info = function* (ctx) {
   }
   ctx.body = info;
   ctx.status = 200;
+}
+
+exports.accounts = function* (ctx) {
+  const accounts = yield ctx.service.mine.accounts(ctx.auth.user_id);
+  ctx.body = accounts;
+  ctx.status = 200;
+}
+
+exports.update = function* (ctx) {
+  const result = yield ctx.service.mine.update(ctx.request.body);
+  if (result) {
+    ctx.status = 204;
+    ctx.body = {
+      msg: 'success',
+    };
+    return;
+  }
+  ctx.status = 500;
+  ctx.body = {
+    msg: 'update profile failed',
+  }
 }
