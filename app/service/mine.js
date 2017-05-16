@@ -13,13 +13,34 @@ module.exports = app => {
         return false;
       }
 
-      const result = yield app.mysql.update('sys_token', {
+      // 判断是否存在一个对应userid的token
+      const token = yield app.mysql.get('sys_token', {
         user_id: user.id,
-      }, {
-          where: { access_token: this.ctx.auth.access_token }
-        });
-        
-      return result.affectedRows > 0;
+      });
+      if (token != null) {
+        // 存在一个token，判断客户端是否相同
+        if (this.ctx.auth.client_id === token.client_id) {
+          return {
+            result: true,
+            access_token: token.token,
+          };
+        }
+      }
+
+      // 客户端不同或者不存在userid对应的token，则创建一个新的token
+      const access_token_raw = `${crypto.randomBytes(8).toString("hex")}${user.id}`;
+      const access_token = new Buffer(`${user.id}_${crypto.createHmac('sha1', app.config.keys).update(`${user.id}:${access_token_raw}:${this.ctx.auth.client_id}`).digest().toString('base64')}`).toString('base64');
+      yield app.mysql.insert('sys_token', {
+        access_token: access_token_raw,
+        user_id: user.id,
+        client_id: this.ctx.auth.client_id,
+        token: access_token,
+      });
+
+      return {
+        result: true,
+        access_token,
+      };
     }
     * signup({ username, password, nick, email, invite_code }) {
       // 验证邀请码

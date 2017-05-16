@@ -9,6 +9,7 @@ exports.login = function* (ctx) {
     return;
   }
   ctx.body = {
+    access_token: result.access_token,
     msg: 'login success',
   };
   ctx.status = 200;

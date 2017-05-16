@@ -1,7 +1,7 @@
 'use strict';
 
 const isBlank = (str) => {
-  if ('string' === str && str.trim() === '') {
+  if ('undefined' === str || str.trim() === '') {
     return true;
   }
   return false;
