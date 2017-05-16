@@ -17,6 +17,12 @@ module.exports = app => {
   app.put('/api/mine/info', 'mine.update');
   app.get('/api/mine/accounts', 'mine.accounts');
 
-  app.io.route('chat', app.io.controllers.chat);
-  app.io.of('/chat').route('chat', app.io.controllers.chat);
+  app.io.route('chat', function*(app) {
+    console.log('chat')
+    yield app.io.controllers.chat(app);
+  });
+  app.io.of('/chat').route('chat', function*(app) {
+    console.log('chat/')
+    yield app.io.controllers.chat(app);
+  });
 };

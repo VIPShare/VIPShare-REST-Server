@@ -78,11 +78,14 @@ module.exports = app => {
           create_date: now,
           modify_date: now,
           nickname: nick,
-          sex: 0,
+          sex: '男',
+          avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
           email,
         });
         yield conn.commit();
-        return true;
+        return {
+          result: true,
+        };
       } catch (err) {
         // error, rollback
         yield conn.rollback()

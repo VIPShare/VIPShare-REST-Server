@@ -25,10 +25,11 @@ exports.signup = function* (ctx) {
     }
     return;
   }
+  ctx.status = 201;
   ctx.body = {
+    status: 201,
     msg: 'success',
   }
-  ctx.status = 201;
 }
 
 exports.info = function* (ctx) {

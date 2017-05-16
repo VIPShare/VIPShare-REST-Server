@@ -4,10 +4,7 @@ module.exports = app => {
       super(ctx);
     }
     * index() {
-      const users = yield app.mysql.select('sys_user_detail', {
-        columns: ['id', 'nickname', 'avatar'],
-        order: [['modify_date', 'desc'], ['id', 'desc']],
-      });
+      const users = yield app.mysql.query(`select id, nickname, avatar from sys_user_detail where id != ${this.ctx.auth.user_id} order by modify_date desc, id desc`);
       return users;
     }
   }

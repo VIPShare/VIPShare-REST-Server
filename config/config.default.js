@@ -28,13 +28,9 @@ module.exports = appInfo => {
     }, // passed to engine.io
     transports: ['websocket'],
     namespace: {
-      '/': {
-        connectionMiddleware: ['auth'],
-        packetMiddleware: ['filter'],
-      },
       '/chat': {
-        connectionMiddleware: ['auth'],
-        packetMiddleware: ['filter'],
+        connectionMiddleware: ['events'],
+        packetMiddleware: [],
       },
     },
     redis: {
