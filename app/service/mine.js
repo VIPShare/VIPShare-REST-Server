@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 module.exports = app => {
   class MineService extends app.Service {
     constructor(ctx) {
@@ -101,28 +103,37 @@ module.exports = app => {
       }
     }
     * info(userId) {
-      return yield app.mysql.get('sys_user_detail', {
+      const profile = yield app.mysql.get('sys_user_detail', {
         id: userId,
       });
+      return {
+        id: profile.id,
+        nickname: profile.nickname,
+        sex: profile.sex,
+        birthday: moment(profile.birthday).format('YYYY-MM-DD'),
+        email: profile.email,
+        address: profile.address,
+      }
     }
     * statistics(userId) {
       return yield app.mysql.get('vip_user_statistics', {
         id: userId,
       });
     }
-    * update(account) {
+    * update(profile) {
+      console.log(profile)
       const temp = yield app.mysql.get('sys_user_detail', {
-        id: account.id,
+        id: profile.id,
       });
       const result = yield app.mysql.update('sys_user_detail', {
-        id: account.id,
-        nickname: account.nickname || temp.nickname,
-        sex: account.sex || temp.sex,
-        birthday: account.birthday || temp.birthday,
-        email: account.email || temp.email,
-        address: account.address || temp.address,
+        id: profile.id,
+        nickname: profile.nickname || temp.nickname,
+        sex: profile.sex || temp.sex,
+        birthday: profile.birthday || temp.birthday,
+        email: profile.email || temp.email,
+        address: profile.address || temp.address,
       }, {
-          where: { id: account.id },
+          where: { id: profile.id },
           columns: ['nickname', 'sex', 'birthday', 'email', 'address']
         });
 

@@ -68,7 +68,9 @@ exports.accounts = function* (ctx) {
 }
 
 exports.update = function* (ctx) {
-  const result = yield ctx.service.mine.update(ctx.request.body);
+  let profile = ctx.request.body;
+  profile.id = ctx.auth.user_id;
+  const result = yield ctx.service.mine.update(profile);
   if (result) {
     ctx.status = 204;
     ctx.body = {
