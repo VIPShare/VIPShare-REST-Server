@@ -28,7 +28,7 @@ module.exports = app => {
         return {
           id: account.id,
           type: account.type,
-          username: account.username,
+          username: this.ctx.hideStr(account.username, account.username.length >= 5 ? 2 : 0, account.username.length >= 5 ? account.username.length - 4 : account.username.length),
           source_id: account.source_id,
           editable: this.ctx.auth.user_id == account.source_id,
         }

@@ -44,16 +44,29 @@ function saveStream(stream, filepath, filename) {
     const ws = fs.createWriteStream(filepath);
     stream.pipe(ws);
     ws.on('error', (error) => {
-      reject({error});
+      reject({ error });
     });
     ws.on('finish', () => {
-      resolve({filename: filename});
+      resolve({ filename: filename });
     });
   });
 }
 
+const hideStr = (str, start, count) => {
+  let result = '';
+  for (let i = 0; i < str.length; i++) {
+    if (i >= start && i < (start + count)) {
+      result += '*';
+      continue;
+    }
+    result += str[i];
+  }
+  return result;
+}
+
 module.exports = {
   isBlank,
+  hideStr,
   uploadFile,
   * pagination(db, selects, sqlExcept, pageNumber, pageSize) {
     const start = (pageNumber - 1) * pageSize;
