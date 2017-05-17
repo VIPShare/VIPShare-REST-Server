@@ -81,3 +81,23 @@ exports.update = function* (ctx) {
     msg: 'update profile failed',
   }
 }
+
+exports.avatar = function* (ctx) {
+  console.log('upload')
+  const parts = ctx.multipart();
+  const { filename, error } = yield ctx.service.mine.avatar(parts, `avatar/${ctx.auth.user_id}`);
+
+  if (error) {
+    ctx.status = 500;
+    ctx.body = {
+      status: 500,
+      msg: 'update avatar failed',
+    };
+    return false;
+  }
+  ctx.status = 201;
+  ctx.body = {
+    filename,
+    msg: 'success',
+  }
+}

@@ -17,6 +17,7 @@ module.exports = app => {
   app.put('/api/mine/info', 'mine.update');
   app.get('/api/mine/statistics', 'mine.statistics');
   app.get('/api/mine/accounts', 'mine.accounts');
+  app.post('/api/mine/avatar', 'mine.avatar');
 
   app.io.route('chat', function*(app) {
     console.log('chat')

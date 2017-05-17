@@ -9,6 +9,11 @@ module.exports = appInfo => {
   // middleware
   config.middleware = ['auth'];
 
+  // file upload
+  config.multipart = {
+    fileSize: '100mb',
+  };
+
   // add your config here
   config.mysql = {
     client: {

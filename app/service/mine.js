@@ -128,6 +128,32 @@ module.exports = app => {
 
       return result.affectedRows > 0;
     }
+    * avatar(parts, group) {
+      const { filename, error } = yield this.ctx.uploadFile(parts, group);
+      if (error) {
+        return {
+          error: 'update avatar failed',
+        };
+      }
+
+      // save url to user
+      const result = yield app.mysql.update('sys_user_detail', {
+        id: this.ctx.auth.user_id,
+        avatar: filename,
+      }, {
+          where: { id: this.ctx.auth.user_id },
+          columns: ['avatar'],
+        });
+
+      if (result.affectedRows > 0) {
+        return {
+          filename,
+        };
+      }
+      return {
+        error: 'update avatar failed',
+      };
+    }
     * accounts(userId) {
       return yield app.mysql.select('vip_account', {
         where: { source_id: userId },
