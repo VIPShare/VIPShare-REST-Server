@@ -46,6 +46,21 @@ exports.info = function* (ctx) {
   ctx.status = 200;
 }
 
+exports.statistics = function* (ctx) {
+  const info = yield ctx.service.mine.statistics(ctx.auth.user_id);
+  if (info == null) {
+    ctx.status = 200;
+    ctx.body = {
+      shares_count: 0,
+      friends_count: 0,
+      helpful_count: 0,
+    };
+    return;
+  }
+  ctx.body = info;
+  ctx.status = 200;
+}
+
 exports.accounts = function* (ctx) {
   const accounts = yield ctx.service.mine.accounts(ctx.auth.user_id);
   ctx.body = accounts;

@@ -82,6 +82,14 @@ module.exports = app => {
           avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
           email,
         });
+        yield conn.insert('vip_user_statistics', {
+          id: insertId,
+          create_date: now,
+          modify_date: now,
+          shares_count: 0,
+          friends_count: 0,
+          helpful_count: 0,
+        });
         yield conn.commit();
         return {
           result: true,
@@ -94,6 +102,11 @@ module.exports = app => {
     }
     * info(userId) {
       return yield app.mysql.get('sys_user_detail', {
+        id: userId,
+      });
+    }
+    * statistics(userId) {
+      return yield app.mysql.get('vip_user_statistics', {
         id: userId,
       });
     }

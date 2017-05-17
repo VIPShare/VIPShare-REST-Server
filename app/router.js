@@ -15,6 +15,7 @@ module.exports = app => {
   app.post('/api/signup', 'mine.signup');
   app.get('/api/mine/info', 'mine.info');
   app.put('/api/mine/info', 'mine.update');
+  app.get('/api/mine/statistics', 'mine.statistics');
   app.get('/api/mine/accounts', 'mine.accounts');
 
   app.io.route('chat', function*(app) {
