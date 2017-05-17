@@ -7,7 +7,7 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_whatakitty';
 
   // middleware
-  config.middleware = [ 'auth' ];
+  config.middleware = ['auth'];
 
   // add your config here
   config.mysql = {
@@ -20,6 +20,19 @@ module.exports = appInfo => {
     },
     app: true,
     agent: false,
+  };
+
+  config.redis = {
+    client: {
+      cluster: false,
+      nodes: [{
+        host: '127.0.0.1',
+        port: '6379',
+        // family: 'user',
+        // password: 'password',
+        db: 0,
+      }]
+    },
   };
 
   config.io = {
@@ -38,7 +51,7 @@ module.exports = appInfo => {
       port: 6379
     },
   };
-  
+
   config.security = {
     csrf: {
       // 判断是否需要 ignore 的方法，请求上下文 context 作为第一个参数

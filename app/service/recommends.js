@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 module.exports = app => {
   class RecommendService extends app.Service {
     constructor(ctx) {
@@ -13,7 +15,7 @@ module.exports = app => {
             id: recommend.id,
             title: recommend.title,
             image: { uri: recommend.image },
-            time: recommend.create_date,
+            time: moment(recommend.create_date).format('YYYY-MM-DD'),
             source: recommend.source,
           }
         }),
@@ -44,7 +46,7 @@ module.exports = app => {
         source: recommend.source,
         author: recommend.author,
         content: recommend.content,
-        time: recommend.create_date,
+        time: moment(recommend.create_date).format('YYYY-MM-DD'),
       };
     }
   }

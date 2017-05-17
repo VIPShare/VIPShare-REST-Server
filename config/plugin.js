@@ -7,9 +7,12 @@ exports.io = {
   package: 'egg-socket.io',
 };
 
-
 exports.mysql = {
   enable: true,
   package: 'egg-mysql',
 };
 
+exports.redis = {
+  enable: false,
+  package: 'egg-redis',
+};

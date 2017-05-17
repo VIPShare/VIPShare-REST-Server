@@ -27,6 +27,7 @@ const createRoom = (firstId, secondId) => {
 
 
 module.exports = app => {
+  const redis = app.redis;
   return function* (next) {
     this.socket.on('chatWith', ({ ownerId, targetId }) => {
       users[ownerId] = this.socket.id;

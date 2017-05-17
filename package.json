@@ -7,7 +7,9 @@
     "crypto": "^0.0.3",
     "egg": "^1.2.1",
     "egg-mysql": "^3.0.0",
+    "egg-redis": "^1.0.1",
     "egg-socket.io": "^1.2.2",
+    "moment": "^2.18.1",
     "socket.io-client": "^2.0.1"
   },
   "devDependencies": {
