@@ -40,3 +40,17 @@ exports.create = function* (ctx) {
   }
   ctx.status = 201;
 }
+
+exports.update = function* (ctx) {
+  const id = +ctx.params.id;
+  const result = yield ctx.service.accounts.update(id, ctx.request.body);
+  if (result) {
+    ctx.status = 204;
+    return;
+  }
+  ctx.status = 400;
+  ctx.body = {
+    msg: 'update failed',
+  }
+  return;
+}

@@ -128,7 +128,6 @@ module.exports = app => {
       });
     }
     * update(profile) {
-      console.log(profile)
       const temp = yield app.mysql.get('sys_user_detail', {
         id: profile.id,
       });

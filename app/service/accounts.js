@@ -86,6 +86,25 @@ module.exports = app => {
 
       return true;
     }
+    * update(id, account) {
+      const date = new Date();
+      const result = yield app.mysql.update('vip_account', {
+        id,
+        modify_date: date,
+        type: account.type,
+        username: account.username,
+        password: account.password,
+        sharePass: account.sharePass,
+      }, {
+          where: { id, source_id: this.ctx.auth.user_id },
+          columns: ['modify_date', 'type', 'username', 'password', 'sharePass'],
+        });
+
+      if (result.affectedRows !== 1) {
+        return false;
+      }
+      return true;
+    }
   }
   return AccountService;
 };

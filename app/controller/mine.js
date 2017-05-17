@@ -73,9 +73,6 @@ exports.update = function* (ctx) {
   const result = yield ctx.service.mine.update(profile);
   if (result) {
     ctx.status = 204;
-    ctx.body = {
-      msg: 'success',
-    };
     return;
   }
   ctx.status = 500;
@@ -85,7 +82,6 @@ exports.update = function* (ctx) {
 }
 
 exports.avatar = function* (ctx) {
-  console.log('upload')
   const parts = ctx.multipart();
   const { filename, error } = yield ctx.service.mine.avatar(parts, `avatar/${ctx.auth.user_id}`);
 
@@ -97,7 +93,7 @@ exports.avatar = function* (ctx) {
     };
     return false;
   }
-  ctx.status = 201;
+  ctx.status = 200;
   ctx.body = {
     filename,
     msg: 'success',
