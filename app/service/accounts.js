@@ -38,6 +38,11 @@ module.exports = app => {
       const account = yield app.mysql.get('vip_account', {
         id,
       });
+
+      // view + 1
+      yield app.mysql.query(`update vip_user_statistics set helpful_count = helpful_count + 1 where id = ${account.user_id}`)
+      // todo alarm while updating vip_user_statistics failed.
+
       return account;
     }
     * viewable(id, password) {
@@ -51,16 +56,31 @@ module.exports = app => {
     }
     * create(account) {
       const date = new Date();
-      console.log(account);
-      yield app.mysql.insert('vip_account', {
-        create_date: date,
-        modify_date: date,
-        source_id: this.ctx.auth.user_id,
-        type: account.type,
-        username: account.username,
-        password: account.password,
-        sharePass: account.sharePass,
-      });
+      const conn = yield app.mysql.beginTransaction();
+      try {
+        const result = yield conn.insert('vip_account', {
+          create_date: date,
+          modify_date: date,
+          source_id: this.ctx.auth.user_id,
+          type: account.type,
+          username: account.username,
+          password: account.password,
+          sharePass: account.sharePass,
+        });
+        if (result.affectedRows !== 1) {
+          return false;
+        }
+
+        const result2 = yield conn.query(`update vip_user_statistics set shares_count = shares_count + 1 where id = ${result.insertId}`);
+        if (result.affectedRows !== 1) {
+          throw new Error('update statistics failed');
+        }
+
+        yield conn.commit();
+      } catch (error) {
+        yield conn.rollback();
+        return false;
+      }
 
       return true;
     }

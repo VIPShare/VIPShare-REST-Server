@@ -92,6 +92,12 @@ module.exports = app => {
           friends_count: 0,
           helpful_count: 0,
         });
+        const { nums } = conn.query('select count(*) as nums from sys_user')[0];
+        yield conn.update('vip_user_statistics', {
+          friends_count: nums - 1,
+        }, {
+          columns: ['friends_count'],
+        });
         yield conn.commit();
         return {
           result: true,
