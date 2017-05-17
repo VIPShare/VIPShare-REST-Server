@@ -112,12 +112,12 @@ module.exports = app => {
           where: { id: account.id },
           columns: ['nickname', 'sex', 'birthday', 'email', 'address']
         });
-      
+
       return result.affectedRows > 0;
     }
     * accounts(userId) {
       return yield app.mysql.select('vip_account', {
-        source_id: userId,
+        where: { source_id: userId },
       });
     }
   }
