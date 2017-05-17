@@ -1,45 +1,52 @@
 let users = {};
+let messages = {};
+let rooms = {};
+
+const previousMessages = (firstId, secondId) => {
+  return {
+    previousMessagesObj: messages[`${firstId}-${secondId}`] || messages[`${secondId}-${firstId}`] || [],
+    key: messages[`${secondId}-${firstId}`] ? `${secondId}-${firstId}` : `${firstId}-${secondId}`,
+  };
+}
+
+const append = (firstId, secondId, msgs) => {
+  let { previousMessagesObj, key } = previousMessages(firstId, secondId);
+  const appended = Array.isArray(msgs) ? msgs : [msgs];
+  messages[key] = appended.concat(previousMessagesObj);
+}
+
+const getRoom = (firstId, secondId) => {
+  return rooms[`${firstId}-${secondId}-room`] || rooms[`${secondId}-${firstId}-room`];
+}
+
+const createRoom = (firstId, secondId) => {
+  const room = `${firstId}-${secondId}-room`;
+  rooms[room] = room;
+  return room;
+}
+
 
 module.exports = app => {
   return function* (next) {
     this.socket.on('chatWith', ({ ownerId, targetId }) => {
       users[ownerId] = this.socket.id;
-      console.log(users);
-      this.socket.emit('roomJoined');
+      let room = getRoom(ownerId, targetId);
+      if (!room) {
+        room = createRoom(ownerId, targetId);
+      }
+      this.socket.join(room, () => {
+        this.socket.emit('roomJoined', { previousMessages: previousMessages(ownerId, targetId).previousMessagesObj });
+      });
     });
 
-    this.socket.on('send', ({ ownerId, targetId, messages }) => {
-      if (users[targetId]) {
-        console.log(targetId + '存在，发送');
-        this.socket.emit('echo', {messages, time: new Date()});
-        this.socket.to(users[targetId]).emit('reback', {messages, time: new Date()});
-      }
-    })
-    // this.socket.on('chatWith', ({ownerId, targetId}) => {
-    //   // const roomName = `${ownerId}_${targetId}_room`;
-    //   this.socket.join('room', () => {
-    //     console.log(`${ownerId} and ${targetId} has been joined room named room`)
-    //     app.io.in('room').emit('roomJoined');
-    //   });
-    // });
-    // this.socket.on('typing', ({ownerId, targetId}) => {
-    //   const roomName = `${ownerId}_${targetId}_room`;
-    //   app.io.in(roomName).emit('typing', `${targetId} is typing`);
-    // });
-    // this.socket.on('send', ({ownerId, targetId, messages = []}) => {
-    //   console.log(`receive message ${JSON.stringify(messages)}`);
-    //   const roomName = `${ownerId}_${targetId}_room`;
-    //   console.log(`in ${roomName}， ${ownerId} sent message ${JSON.stringify(messages)} to ${targetId}`);
-    //   app.io.in(roomName).emit('message', {
-    //     messages,
-    //     time: new Date(),
-    //   });
-    //   // this.socket.emit('message', {
-    //   //   messages,
-    //   //   time: new Date(),
-    //   // });
+    this.socket.on('send', ({ ownerId, targetId, messages: msg }) => {
+      append(ownerId, targetId, msg);
+      this.socket.emit('echo', { messages: msg });
+      const room = getRoom(ownerId, targetId);
+      console.log(rooms)
+      this.socket.to(room).emit('reback', { messages: msg });
+    });
 
-    // });
     yield* next;
   };
 };
