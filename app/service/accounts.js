@@ -40,19 +40,21 @@ module.exports = app => {
       });
 
       // view + 1
-      yield app.mysql.query(`update vip_user_statistics set helpful_count = helpful_count + 1 where id = ${account.user_id}`)
-      // todo alarm while updating vip_user_statistics failed.
-
+      if (account.source_id != this.ctx.auth.user_id) {
+        yield app.mysql.query(`update vip_user_statistics set helpful_count = helpful_count + 1 where id = ${account.source_id}`)
+        // todo alarm while updating vip_user_statistics failed.
+      }
       return account;
     }
     * viewable(id, password) {
       const account = yield app.mysql.get('vip_account', {
         id,
+        sharePass: password,
       });
       if (account == null) {
         return false;
       }
-      return account.password === password;
+      return true;
     }
     * create(account) {
       const date = new Date();
