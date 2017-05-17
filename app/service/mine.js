@@ -155,9 +155,18 @@ module.exports = app => {
       };
     }
     * accounts(userId) {
-      return yield app.mysql.select('vip_account', {
+      const accounts = yield app.mysql.select('vip_account', {
         where: { source_id: userId },
       });
+      return accounts.map(account => {
+        return {
+          id: account.id,
+          type: account.type,
+          username: account.username,
+          source_id: account.source_id,
+          editable: true,
+        };
+      })
     }
   }
   return MineService;
