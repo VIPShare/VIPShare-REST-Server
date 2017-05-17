@@ -115,6 +115,7 @@ module.exports = app => {
       return {
         id: profile.id,
         nickname: profile.nickname,
+        avatar: profile.avatar,
         sex: profile.sex,
         birthday: moment(profile.birthday).format('YYYY-MM-DD'),
         email: profile.email,
